@@ -28,13 +28,13 @@ class MealTableViewCell: UITableViewCell {
     func setup(meal : Meal){
         
         
-        var vegEmoi = ""
+        var vegEmoji = ""
         
         if meal.isVegetarian{
-            vegEmoi = "🥦"
+            vegEmoji = "🥦"
         }
         
-        titleLabel.text = meal.title + vegEmoi
+        titleLabel.text = meal.title + vegEmoji
         noteLabel.text = meal.note
         
         titleLabel.text = meal.title
