@@ -23,10 +23,30 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        title = "Meal Planner"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem : .add, target: self, action: #selector(addMeal))
+        
         tableView.dataSource = self
         tableView.delegate = self
     }
     
+    
+    @objc func addMeal(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let addMealViewController = storyboard.instantiateViewController(withIdentifier: "addmeal") as? AddMealViewController{
+            
+            addMealViewController.onSave = { meal, date in
+                if let dayMeal = self.dayMeals.first(where: { Calendar.current.isDate($0.date, inSameDayAs: date) }){
+                    dayMeal.meals.append(meal)
+                    
+                }else {
+                    self.dayMeals.append(DayMeal(date: date, meals: [meal]))
+                }
+            }
+
+            navigationController?.pushViewController(addMealViewController, animated: true)
+        }
+    }
     func numberOfSections(in tableView: UITableView) -> Int {
         return dayMeals.count
     }
