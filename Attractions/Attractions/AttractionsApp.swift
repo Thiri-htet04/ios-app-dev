@@ -11,7 +11,8 @@ import SwiftUI
 struct AttractionsApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            //Initial Screen
+            AttractionsView()
         }
     }
 }
