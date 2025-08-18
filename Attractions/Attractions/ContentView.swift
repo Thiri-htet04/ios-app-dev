@@ -8,30 +8,34 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    
+    var content : ContentModel
+
     var body: some View {
         VStack{
             
-            MapView()
-                .frame(height: 250)
-            CircleImageView()
+            MapView(coordinate : content.coordinate)
+                .frame(height: 200)
+            CircleImageView(imageName: content.imageName)
                 .padding(.top, -100)
             
             //Text description
             VStack(alignment : .leading){
-                Text("Kew Mae Pan")
+                Text(content.name)
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 HStack{
-                    Text("Doi Intanon National Park")
+                    Text(content.place)
                         .font(.subheadline)
                     Spacer()
-                    Text("Chiang Mai")
+                    Text(content.city)
                 }
                 Divider()
-                Text("About Kew Mae Pan")
+                Text("About \(content.name)")
                     .font(.title2)
                     .fontWeight(.medium)
-                Text("Kew Mae Pan, in Doi Inthanon National Park, Chiang Mai, is a 3 km nature trail known for its stunning sunrise views, misty valleys, and mountain scenery, making it a popular trekking and photography spot.")
+                Text(content.description)
                 //                .lineLimit(2)
             }
             .padding()
@@ -41,5 +45,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(content: contents[0])
 }

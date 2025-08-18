@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct CircleImageView: View {
+    
+    let imageName: String
     var body: some View {
 //        Image(systemName: "photo.stack")
         
+        
         ZStack {
-            Image("img1")
+            Image(imageName)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 200, height: 200)
@@ -29,5 +32,5 @@ struct CircleImageView: View {
 }
 
 #Preview {
-    CircleImageView()
+    CircleImageView(imageName: contents[0].imageName)
 }
