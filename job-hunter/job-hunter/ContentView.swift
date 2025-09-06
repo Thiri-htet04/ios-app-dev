@@ -8,43 +8,88 @@
 import SwiftUI
 
 
-struct Job : Decodable {
+struct Job : Decodable, Hashable {
     var id : String
     var title : String
     var companyName : String
     var category : String
+    var employmentType : String
+    var description : String
+    var location : JobLocation
+    var skills : [String]
+    var salary : JobSalary
+}
+
+struct JobLocation : Decodable, Hashable {
+    var city : String?
+    var country : String?
+    
+    var locationFormatted : String {
+        if let city {
+            if let country {
+                return "\(city), \(country)"
+            }
+            return city
+        }
+        return "-"
+    }
+}
+
+
+struct JobSalary: Decodable, Hashable {
+    var min : Int
+    var max : Int
+    var currency : String
+    
+    var salaryFormatted : String {
+        return "\(min.formatted())-\(max.formatted()) \(currency)"
+    }
 }
 
 struct ContentView: View {
     
     @State var jobs : [Job] = []
     
+    @State var showURLError = false
+    
+    @State var showInvalidResponseError = false
+    
+    @State var showDecodeError = false
+    
     var body: some View {
         NavigationStack{
             ScrollView{
                 VStack{
                     ForEach(jobs, id: \.id) { job in
-                        VStack(alignment: .leading){
-                            Text("Data Scientist")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                            Text("DataCrop Analytics")
-                                .font(.callout)
-                                .foregroundStyle(.white)
-                            Text("Software Engineering")
-                                .font(.callout)
-                                .foregroundStyle(.white)
+                        
+                        NavigationLink(value: job){
+                            VStack(alignment: .leading){
+                                Text(job.title)
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.white)
+                                Text(job.companyName)
+                                    .font(.callout)
+                                    .foregroundStyle(.white)
+                                Text(job.category)
+                                    .font(.callout)
+                                    .foregroundStyle(.white)
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(.blue.gradient)
+                            .clipShape(.rect(cornerRadius: 12))
                         }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(.blue.gradient)
-                        .clipShape(.rect(cornerRadius: 12))
+                        
                     }
                     
                 }
                 .padding(.horizontal)
             }
             .navigationTitle("JobHunter")
+            .navigationDestination(for: Job.self) { job in
+                JobDetail(job: job)
+            }
             
         }
         .task {
@@ -52,9 +97,38 @@ struct ContentView: View {
             do{
                 jobs = try await fetchJobs()
             }catch{
+                guard let error = error  as? AppError else {return}
                 
+                switch error {
+                case .URLError:
+                    showURLError = true
+                case .InvalidResponseError:
+                    showInvalidResponseError = true
+                case .DecodeError:
+                    showDecodeError = true
+                }
             }
         }
+        
+        .alert("Invalid URL", isPresented: $showURLError) {
+            Button("OK") {}
+        } message: {
+            Text("Please try again later")
+        }
+        
+        .alert("Invalid Response", isPresented: $showInvalidResponseError) {
+            Button("OK") {}
+        } message: {
+            Text("Please try again later")
+        }
+        
+        
+        .alert("Decoding Failed", isPresented: $showDecodeError) {
+            Button("OK") {}
+        } message: {
+            Text("Please try again later")
+        }
+
     }
     
     
@@ -78,6 +152,74 @@ struct ContentView: View {
             throw AppError.URLError
         }
         
+    }
+}
+
+
+struct JobDetail: View {
+    var job: Job
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+
+                // === Header ===
+                VStack(alignment: .leading) {
+                    Text("Full-time") // can be job.employmentType
+                        .font(.callout)
+
+                    Text(job.title)
+                        .font(.title)
+                        .fontWeight(.semibold)
+
+                    Text(job.companyName)
+                        .font(.title2)
+                        .foregroundStyle(.gray)
+                        .padding(.bottom)
+                }
+
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(job.skills, id: \.self) { skill in
+                            Text(skill)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(.blue.gradient)
+                                .foregroundStyle(.white)
+                                .clipShape(Capsule())
+                        }
+                    }
+                }
+                .scrollIndicators(.never)
+
+                VStack(alignment: .leading) {
+                    Text("Location")
+                        .font(.callout)
+                        .fontWeight(.semibold)
+
+                    Text(job.location.locationFormatted)
+                }
+
+                VStack(alignment: .leading) {
+                    Text("Job Description")
+                        .font(.callout)
+                        .fontWeight(.semibold)
+
+                    Text(job.description)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+             
+                VStack(alignment: .leading) {
+                    Text("Salary")
+                        .font(.callout)
+                        .fontWeight(.semibold)
+
+                    Text(job.salary.salaryFormatted)
+                }
+            }
+            .padding()
+        }
     }
 }
 
