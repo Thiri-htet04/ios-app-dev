@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Calendar: View {
     
-    let startAt : Int = 2 //Monday = 0, Tuesday = 1, ... , Sunday = 6
+    let startAt : Int = 3 //Monday = 0, Tuesday = 1, ... , Sunday = 6
     
     
     @State var dates: [Int] = []
@@ -59,3 +59,5 @@ struct Calendar: View {
 #Preview {
     Calendar()
 }
+
+
