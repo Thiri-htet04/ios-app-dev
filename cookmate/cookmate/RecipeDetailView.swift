@@ -72,15 +72,6 @@ struct RecipeDetailView: View {
                         }
                     }
                 }
-                
-//                Group {
-//                    Text("Ingredients").font(.headline)
-//                    VStack(alignment: .leading, spacing: 6) {
-//                        ForEach(recipe.ingredients, id: \.self) { item in
-//                            Text(item)
-//                        }
-//                    }
-//                }
 
 
                 Group {
@@ -106,21 +97,11 @@ struct RecipeDetailView: View {
         
         .toolbar{
             ToolbarItem(placement: .topBarTrailing){
-//                Button(isFav ? "Unfavorite" : "Favorite") {
-//                    toggleFavorite()
-//                }
-//                .buttonStyle(.borderedProminent)
-                
-                Button {
-                            toggleFavorite()
-                } label: {
-                    Text(isFav ? "Unfavorite" : "Favorite")
-                        .font(.subheadline)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(Color(.systemGray5))
-                        .clipShape(Capsule())
+                Button(isFav ? "Unfavorite" : "Favorite") {
+                    toggleFavorite()
                 }
+                .buttonStyle(.automatic)
+                
             }
         }
         

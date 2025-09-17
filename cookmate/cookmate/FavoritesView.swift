@@ -45,7 +45,7 @@ struct FavoritesView: View {
 
                                 Text(fav.name)
                                     .font(.subheadline)
-                                    .foregroundStyle(.primary)
+                                    .foregroundColor(.black)
                                     .lineLimit(2)
                             }
                         }

@@ -83,10 +83,10 @@ private struct RecipeCard: View {
 
             Text(recipe.name)
                 .font(.subheadline)
-                .foregroundStyle(.primary)
+                .foregroundColor(.black)
                 .multilineTextAlignment(.leading)
                 .lineLimit(2)
-                .tint(.black)
+                
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }

@@ -54,31 +54,10 @@ final class FavoriteRecipe {
     }
 }
 
-//struct RecipesAPI {
-//    static func fetchRecipes(id: Int) async throws -> [Recipe] {
-//        guard let url = URL(string: "https://dummyjson.com/recipes/\(id)") else {
-//            throw AppError.URLError
-//        }
-//
-//        let (data, response) = try await URLSession.shared.data(from: url)
-//        guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
-//            throw AppError.InvalidResponseError
-//        }
-//
-//        do {
-//            let decoder = JSONDecoder()
-//            let resp = try decoder.decode(RecipesResponse.self, from: data)
-//            return resp.recipes
-//        } catch {
-//            throw AppError.DecodeError
-//        }
-//    }
-//}
-
 
 struct RecipesAPI {
 
-    // 1) List endpoint: /recipes  →  RecipesResponse { recipes: [Recipe], ... }
+   
     static func fetchRecipes() async throws -> [Recipe] {
         guard let url = URL(string: "https://dummyjson.com/recipes") else {
             throw AppError.URLError
@@ -95,7 +74,7 @@ struct RecipesAPI {
         }
     }
 
-    // 2) Detail endpoint: /recipes/{id}  →  Recipe (single object)
+
     static func fetchRecipe(id: Int) async throws -> Recipe {
         guard let url = URL(string: "https://dummyjson.com/recipes/\(id)") else {
             throw AppError.URLError
